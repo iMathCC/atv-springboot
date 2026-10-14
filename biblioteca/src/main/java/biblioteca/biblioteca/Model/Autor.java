@@ -1,32 +1,63 @@
 package biblioteca.biblioteca.Model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Builder
-@Data
-@Table(name = "tb_autor")
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "autor")
 public class Autor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")
     private Long id;
 
-    @Column(name = "ds_nomeAutor", nullable = false)
-    @JsonProperty("nomeAutor")
-    private String nomeAutor;
+    private String nomeAutor; 
 
-    @Column(name = "ds_nacionalidade", nullable = false)
-    @JsonProperty("nacionalidade")
     private String nacionalidade;
 
-    // Adicione a relação com Livro aqui
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("autor")
+    private List<Livro> livros = new ArrayList<>();
 
+    public Autor() {
+    }
+
+    public Autor(String nomeAutor, String nacionalidade) {
+        this.nomeAutor = nomeAutor;
+        this.nacionalidade = nacionalidade;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNomeAutor() {
+        return nomeAutor;
+    }
+
+    public void setNomeAutor(String nomeAutor) {
+        this.nomeAutor = nomeAutor;
+    }
+
+    public String getNacionalidade() {
+        return nacionalidade;
+    }
+
+    public void setNacionalidade(String nacionalidade) {
+        this.nacionalidade = nacionalidade;
+    }
+
+    public List<Livro> getLivros() {
+        return livros;
+    }
+
+    public void setLivros(List<Livro> livros) {
+        this.livros = livros;
+    }
 }
